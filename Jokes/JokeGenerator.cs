@@ -116,7 +116,7 @@ namespace Markov_Jokes.Jokes
                 }
             }
 
-            return wordSet.Last().Key;
+            return TokenConstants.END_OF_JOKE;
         }
     }
 }

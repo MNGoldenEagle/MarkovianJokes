@@ -51,6 +51,8 @@ namespace Markov_Jokes.Jokes
         {
             var tokens = SplitIntoTokens(joke);
 
+            Cache.AddWord(TokenConstants.NO_LEADING);
+            Cache.AddWord(TokenConstants.END_OF_JOKE);
             tokens.ToList().ForEach(token => Cache.AddWord(token));
 
             Cache.AddWordTriplet(TokenConstants.NO_LEADING, TokenConstants.NO_LEADING, tokens[0]);
@@ -82,9 +84,6 @@ namespace Markov_Jokes.Jokes
                 processedTokens.Add(processedToken);
             }
             
-            // Add the End-Of-Joke terminator.
-            processedTokens.Add(TokenConstants.END_OF_JOKE);
-
             return processedTokens;
         }
 

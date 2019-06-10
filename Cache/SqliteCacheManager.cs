@@ -84,7 +84,7 @@ namespace Markov_Jokes.Cache
             {
                 if (!existingWordIds.Keys.Contains(word.Content))
                 {
-                    newWords.Append(word);
+                    newWords.Enqueue(word);
                 }
             });
             Database.Words.AddRange(newWords);
@@ -105,7 +105,7 @@ namespace Markov_Jokes.Cache
                 var existing = existingWeights.GetValueOrDefault(weight.Word1Id)?.GetValueOrDefault(weight.Word2Id)?.GetValueOrDefault(weight.FollowingWordId);
                 if (existing == null)
                 {
-                    newWeights.Append(weight);
+                    newWeights.Enqueue(weight);
                 }
                 else
                 {
@@ -119,9 +119,9 @@ namespace Markov_Jokes.Cache
             Occurrences = new ConcurrentDictionary<string, ConcurrentDictionary<string, ConcurrentDictionary<string, int>>>();
         }
 
-        private Queue<Weight> ConvertDictionariesToWeights(Dictionary<string, Word> existingWords, Dictionary<long, Dictionary<long, Dictionary<long, Weight>>> existingWeights)
+        private ConcurrentQueue<Weight> ConvertDictionariesToWeights(Dictionary<string, Word> existingWords, Dictionary<long, Dictionary<long, Dictionary<long, Weight>>> existingWeights)
         {
-            var result = new Queue<Weight>();
+            var result = new ConcurrentQueue<Weight>();
             
             // We'll parallelize at the first word as that's going to have the most possible entries.  Parallelizing at each level would potentially overwhelm the thread pool,
             // so doing so at only the top level should be sufficient.
@@ -148,7 +148,7 @@ namespace Markov_Jokes.Cache
                             Occurrences = level3.Value
                         };
 
-                        result.Append(weight);
+                        result.Enqueue(weight);
                     }
                 }
             });

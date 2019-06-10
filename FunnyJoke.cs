@@ -37,6 +37,8 @@ namespace Markov_Jokes
                     Console.WriteLine(generator.GenerateJoke());
                 }
             }
+
+            Console.WriteLine();
         }
     }
 }

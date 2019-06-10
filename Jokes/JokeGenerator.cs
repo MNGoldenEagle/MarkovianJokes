@@ -40,33 +40,32 @@ namespace Markov_Jokes.Jokes
             var currentWord = GetWord(Cache.GetStartingWords());
 
             // Loop until we reach the end of our joke.
-            while (!currentWord.Equals("<eoj>"))
+            while (!currentWord.Equals(TokenConstants.END_OF_JOKE))
             {
                 var addedWord = currentWord;
-                var wordIsSymbol = IsSymbol(currentWord);
+                var wordIsTerminating = IsTerminating(currentWord);
 
-                // If we're not at the beginning of the joke and the current word isn't a symbol, prefix with a space.
-                // Symbols should always appear adjacent to their previous words.
-                if (!start && !IsSymbol(currentWord))
+                // If we're not at the beginning of the joke, prefix with a space.
+                if (!start)
                 {
                     addedWord = " " + addedWord;
                 }
 
-                // If this is the first word in a sentence and the word isn't a symbol, title-case it.
-                if (firstWord && !wordIsSymbol)
+                // If this is the first word in a sentence, title-case it.
+                if (firstWord)
                 {
                     addedWord = TEXT_HELPER.ToTitleCase(addedWord);
                     firstWord = false;
                 }
 
                 // If the word is a terminator (something that ends the sentence), ensure that next sentence is capitalized.
-                if (wordIsSymbol && IsTerminator(currentWord))
+                if (wordIsTerminating)
                 {
                     firstWord = true;
                 }
 
                 // Make sure we keep our quotes balanced.
-                if ("\"".Equals(currentWord) || "“".Equals(currentWord))
+                if (currentWord.Count(c => c == '"' || c == '“' || c == '”') % 2 == 1)
                 {
                     startQuote = !startQuote;
                 }
@@ -86,14 +85,9 @@ namespace Markov_Jokes.Jokes
             return builder.ToString();
         }
 
-        private bool IsSymbol(string word)
+        private bool IsTerminating(string word)
         {
-            return !char.IsLetterOrDigit(word[0]);
-        }
-
-        private bool IsTerminator(string word)
-        {
-            return ".".Equals(word) || "?".Equals(word) || "!".Equals(word);
+            return word.IndexOfAny(new char[] { '.', '?', '!' }) >= 0;
         }
 
         /// <summary>

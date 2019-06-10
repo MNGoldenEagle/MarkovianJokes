@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "Markov Jokes": {
+      "commandName": "Project",
+      "commandLineArgs": "5",
+      "workingDirectory": "C:\\Users\\MNGoldenEagle\\Source\\Repos\\Markov Jokes"
+    }
+  }
+}

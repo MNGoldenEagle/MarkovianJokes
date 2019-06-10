@@ -10,12 +10,6 @@ namespace Markov_Jokes.Cache
     public interface ICacheManager : IDisposable
     {
         /// <summary>
-        /// Adds the first word of a joke to the cache.
-        /// </summary>
-        /// <param name="word">The first word of a joke</param>
-        void AddFirstWord(string word);
-
-        /// <summary>
         /// Adds the jokes (pre-parsed) to the cache.
         /// </summary>
         /// <param name="jokes">The jokes to store in the cache</param>
@@ -23,20 +17,18 @@ namespace Markov_Jokes.Cache
 
         /// <summary>
         /// Adds the provided word to the cache.
-        /// 
-        /// Words added via this method are assumed not to be the first word of a joke.  If this is not the case, use the
-        /// <see cref="AddFirstWord(string)"/> method instead.
         /// </summary>
         /// <param name="word">The word to add to the cache</param>
         void AddWord(string word);
 
         /// <summary>
-        /// Adds the pair of words to the cache.  The cache will internally keep track of the number of times it encounters
-        /// the pair of words.
+        /// Adds the triplet of words to the cache.  The cache will internally keep track of the number of times it encounters
+        /// the triplet.
         /// </summary>
         /// <param name="firstWord">The first word encountered</param>
         /// <param name="secondWord">The second word encountered</param>
-        void AddWordPair(string firstWord, string secondWord);
+        /// <param name="followingWord">The word that follows the first two</param>
+        void AddWordTriplet(string firstWord, string secondWord, string thirdWord);
 
         /// <summary>
         /// Returns the number of jokes that have been processed.
@@ -50,16 +42,11 @@ namespace Markov_Jokes.Cache
         void PersistNewEntries();
 
         /// <summary>
-        /// Gets a dictionary of valid starting words from the cache, where the key is the first word and the value is the number of occurrences.
+        /// Returns a dictionary of words that may follow the provided words, where the key is words that can follow and the value is the number of occurrences.
         /// </summary>
-        /// <returns>A dictionary of starting words</returns>
-        IDictionary<string, int> GetStartingWords();
-
-        /// <summary>
-        /// Returns a dictionary of words that may follow the provided word, where the key is words that can follow and the value is the number of occurrences.
-        /// </summary>
-        /// <param name="word">The word</param>
+        /// <param name="word1">The first word</param>
+        /// <param name="word2">The second word</param>
         /// <returns>The potential following words and their weights, as a dictionary</returns>
-        IDictionary<string, int> GetWeightsForWord(string word);
+        IDictionary<string, int> GetWeightsForWord(string word1, string word2);
     }
 }

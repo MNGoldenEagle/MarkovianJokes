@@ -37,7 +37,8 @@ namespace Markov_Jokes.Jokes
             bool firstWord = true;
             bool start = true;
             bool startQuote = false;
-            var currentWord = GetWord(Cache.GetStartingWords());
+            var previousWord = TokenConstants.NO_LEADING;
+            var currentWord = GetWord(Cache.GetWeightsForWord(TokenConstants.NO_LEADING, TokenConstants.NO_LEADING));
 
             // Loop until we reach the end of our joke.
             while (!currentWord.Equals(TokenConstants.END_OF_JOKE))
@@ -73,7 +74,9 @@ namespace Markov_Jokes.Jokes
                 start = false;
                 builder.Append(addedWord);
 
-                currentWord = GetWord(Cache.GetWeightsForWord(currentWord));
+                var nextWord = GetWord(Cache.GetWeightsForWord(previousWord, currentWord));
+                previousWord = currentWord;
+                currentWord = nextWord;
             }
 
             // If quotes are unbalanced, add a quote to the end.  Who knows if it'll make sense?

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Markov_Jokes.Migrations
 {
     [DbContext(typeof(CacheContext))]
-    [Migration("20190609055721_InitialCreate")]
+    [Migration("20190610054007_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,7 +32,9 @@ namespace Markov_Jokes.Migrations
 
             modelBuilder.Entity("Markov_Jokes.Cache.Model.Weight", b =>
                 {
-                    b.Property<long>("WordId");
+                    b.Property<long>("Word1Id");
+
+                    b.Property<long>("Word2Id");
 
                     b.Property<long>("FollowingWordId");
 
@@ -40,13 +42,17 @@ namespace Markov_Jokes.Migrations
 
                     b.Property<int>("Occurrences");
 
-                    b.Property<int>("WordId1");
+                    b.Property<int>("Word1Id1");
 
-                    b.HasKey("WordId", "FollowingWordId");
+                    b.Property<int>("Word2Id1");
+
+                    b.HasKey("Word1Id", "Word2Id", "FollowingWordId");
 
                     b.HasIndex("FollowingWordId1");
 
-                    b.HasIndex("WordId1");
+                    b.HasIndex("Word1Id1");
+
+                    b.HasIndex("Word2Id1");
 
                     b.ToTable("Weights");
                 });
@@ -59,11 +65,7 @@ namespace Markov_Jokes.Migrations
                     b.Property<string>("Content")
                         .IsRequired();
 
-                    b.Property<int>("StartCount");
-
                     b.HasKey("Id");
-
-                    b.HasAlternateKey("Content");
 
                     b.HasIndex("Content")
                         .IsUnique();
@@ -78,9 +80,14 @@ namespace Markov_Jokes.Migrations
                         .HasForeignKey("FollowingWordId1")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Markov_Jokes.Cache.Model.Word", "Word")
+                    b.HasOne("Markov_Jokes.Cache.Model.Word", "Word1")
                         .WithMany()
-                        .HasForeignKey("WordId1")
+                        .HasForeignKey("Word1Id1")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Markov_Jokes.Cache.Model.Word", "Word2")
+                        .WithMany()
+                        .HasForeignKey("Word2Id1")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

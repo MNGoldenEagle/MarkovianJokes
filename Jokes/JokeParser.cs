@@ -51,15 +51,18 @@ namespace Markov_Jokes.Jokes
         {
             var tokens = SplitIntoTokens(joke);
 
-            Cache.AddFirstWord(tokens[0]);
-            tokens.Skip(1).ToList().ForEach(token => Cache.AddWord(token));
+            tokens.ToList().ForEach(token => Cache.AddWord(token));
 
-            for (int i = 0; i < tokens.Count - 1; i++)
+            Cache.AddWordTriplet(TokenConstants.NO_LEADING, TokenConstants.NO_LEADING, tokens[0]);
+            Cache.AddWordTriplet(TokenConstants.NO_LEADING, tokens[0], tokens[1]);
+
+            for (int i = 0; i < tokens.Count - 2; i++)
             {
                 var token1 = tokens[i];
                 var token2 = tokens[i + 1];
+                var token3 = tokens[i + 2];
 
-                Cache.AddWordPair(token1, token2);
+                Cache.AddWordTriplet(token1, token2, token3);
             }
         }
 

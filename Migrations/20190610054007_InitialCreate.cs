@@ -25,28 +25,28 @@ namespace Markov_Jokes.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Content = table.Column<string>(nullable: false),
-                    StartCount = table.Column<int>(nullable: false)
+                    Content = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Words", x => x.Id);
-                    table.UniqueConstraint("AK_Words_Content", x => x.Content);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Weights",
                 columns: table => new
                 {
-                    WordId = table.Column<long>(nullable: false),
+                    Word1Id = table.Column<long>(nullable: false),
+                    Word2Id = table.Column<long>(nullable: false),
                     FollowingWordId = table.Column<long>(nullable: false),
-                    WordId1 = table.Column<int>(nullable: false),
+                    Word1Id1 = table.Column<int>(nullable: false),
+                    Word2Id1 = table.Column<int>(nullable: false),
                     FollowingWordId1 = table.Column<int>(nullable: false),
                     Occurrences = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Weights", x => new { x.WordId, x.FollowingWordId });
+                    table.PrimaryKey("PK_Weights", x => new { x.Word1Id, x.Word2Id, x.FollowingWordId });
                     table.ForeignKey(
                         name: "FK_Weights_Words_FollowingWordId1",
                         column: x => x.FollowingWordId1,
@@ -54,8 +54,14 @@ namespace Markov_Jokes.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Weights_Words_WordId1",
-                        column: x => x.WordId1,
+                        name: "FK_Weights_Words_Word1Id1",
+                        column: x => x.Word1Id1,
+                        principalTable: "Words",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Weights_Words_Word2Id1",
+                        column: x => x.Word2Id1,
                         principalTable: "Words",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -67,9 +73,14 @@ namespace Markov_Jokes.Migrations
                 column: "FollowingWordId1");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Weights_WordId1",
+                name: "IX_Weights_Word1Id1",
                 table: "Weights",
-                column: "WordId1");
+                column: "Word1Id1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Weights_Word2Id1",
+                table: "Weights",
+                column: "Word2Id1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Words_Content",

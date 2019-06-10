@@ -24,15 +24,9 @@ namespace Markov_Jokes.Cache.Model
         [Required]
         public string Content { get; set; }
 
-        /// <summary>
-        /// The number of occurrences this word has begun a joke.
-        /// </summary>
-        [Required]
-        public int StartCount { get; set; }
-
         public override string ToString()
         {
-            return string.Format("Word ID: {0} Content: [{1}] Start occurrences: {2}", Id, Content, StartCount);
+            return string.Format("Word ID: {0} Content: [{1}]", Id, Content);
         }
     }
 

@@ -16,10 +16,16 @@ namespace Markov_Jokes.Cache.Model
         /// The ID of the first word. This is required to form the composite key.
         /// </summary>
         [Required]
-        public long WordId { get; set; }
+        public long Word1Id { get; set; }
 
         /// <summary>
         /// The ID of the second word. This is required to form the composite key.
+        /// </summary>
+        [Required]
+        public long Word2Id { get; set; }
+
+        /// <summary>
+        /// The ID of the following word. This is required to form the composite key.
         /// </summary>
         [Required]
         public long FollowingWordId { get; set; }
@@ -28,10 +34,16 @@ namespace Markov_Jokes.Cache.Model
         /// The first word. This is required for relational modeling such that Entity Framework can automatically manage it.
         /// </summary>
         [Required]
-        public Word Word { get; set; }
+        public Word Word1 { get; set; }
 
         /// <summary>
         /// The second word. This is required for relational modeling such that Entity Framework can automatically manage it.
+        /// </summary>
+        [Required]
+        public Word Word2 { get; set; }
+
+        /// <summary>
+        /// The following word. This is required for relational modeling such that Entity Framework can automatically manage it.
         /// </summary>
         [Required]
         public Word FollowingWord { get; set; }
@@ -44,7 +56,7 @@ namespace Markov_Jokes.Cache.Model
 
         public override string ToString()
         {
-            return string.Format("Chain Weight First Word: [{0}] Second Word: [{1}] Occurrences: {2}", Word, FollowingWord, Occurrences);
+            return string.Format("Chain Weight First Word: [{0}] Second Word: [{1}] Following Word: [{2}] Occurrences: {3}", Word1, Word2, FollowingWord, Occurrences);
         }
     }
 
@@ -55,12 +67,12 @@ namespace Markov_Jokes.Cache.Model
     {
         public bool Equals(Weight x, Weight y)
         {
-            return x.WordId.Equals(y.WordId) && x.FollowingWordId.Equals(y.FollowingWordId);
+            return x.Word1Id.Equals(y.Word1Id) && x.Word2Id.Equals(y.Word2Id) && x.FollowingWordId.Equals(y.FollowingWordId);
         }
 
         public int GetHashCode(Weight obj)
         {
-            return 51 ^ (int)obj.WordId ^ (int)((long.MaxValue - obj.FollowingWordId) >> 32);
+            return 51 ^ (int)obj.Word1Id ^ (int)(obj.Word2Id << 16) ^ (int)((long.MaxValue - obj.FollowingWordId) >> 32);
         }
     }
 }
